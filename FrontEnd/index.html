@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaCash | Turn Receipts Into Cash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <div class="logo-icon">$</div>
+            BaCash
+        </a>
+        <div id="navAuthArea" class="gsi-wrapper">
+            <!-- Google Button or Profile goes here -->
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Turn Your Receipts Into Cash</h1>
+        <p>Upload a photo of any receipt and we'll automatically calculate your cashback.</p>
+        <button class="btn btn-primary btn-rounded"
+            onclick="document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });">Get Started — It's
+            Free</button>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dashboard-container" id="dashboard">
+        <div class="card">
+            <!-- Login Gate -->
+            <div id="loginGate" class="login-gate">
+                <h3>Sign in to start earning</h3>
+                <div id="gateGoogleBtn" class="gsi-wrapper"></div>
+            </div>
+
+            <!-- Logged-in User Header -->
+            <div id="userHeader" class="user-profile hidden">
+                <!-- Avatar and name injected here -->
+            </div>
+
+            <!-- Upload Zone -->
+            <div class="upload-zone" id="dropZone">
+                <input type="file" id="fileInput">
+
+                <div id="uploadPrompt">
+                    <svg class="upload-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z">
+                        </path>
+                    </svg>
+                    <div class="upload-text">Drag & drop your receipt here</div>
+                    <div class="upload-subtext">or click to browse</div>
+                </div>
+
+                <div id="previewContainer" class="preview-container hidden">
+                    <img id="previewImg" src="" alt="Receipt Preview" class="preview-img hidden">
+                    <div id="fileMeta" class="file-meta"></div>
+                </div>
+            </div>
+
+            <button id="uploadBtn" class="btn btn-primary hidden" onclick="uploadReceipt()">
+                Upload Receipt
+            </button>
+
+            <!-- Cashback Counter -->
+            <div class="counter-card">
+                <div class="counter-label">Total Cashback Earned</div>
+                <div class="counter-value" id="counterValue">$0.00</div>
+                <div class="counter-subtext" id="counterSubtext">Upload your first receipt to start earning</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>How it works</h2>
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="step-title">1. Upload Receipt</div>
+                <div class="step-desc">Take a photo or upload an image of any receipt from your recent purchases.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div class="step-title">2. We Analyze It</div>
+                <div class="step-desc">Our intelligent system scans and validates your purchase items automatically.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="step-title">3. Get Cashback</div>
+                <div class="step-desc">Cash is credited to your account automatically. Watch your balance grow!</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2025 BaCash. All rights reserved.
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Application Logic -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>

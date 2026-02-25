@@ -1,0 +1,43 @@
+{
+  "app": {
+    "name": "BaCash",
+    "version": "1.0.0",
+    "environment": "production"
+  },
+  "aws": {
+    "region": "us-east-1",
+    "s3": {
+      "bucketName": "bacash-frontend",
+      "uploadBucket": "bacash-receipts",
+      "publicUrl": "https://bacash-frontend.s3.amazonaws.com"
+    },
+    "cloudfront": {
+      "distributionId": "YOUR_DISTRIBUTION_ID",
+      "cdnUrl": "https://YOUR_CDN_ID.cloudfront.net"
+    },
+    "apiGateway": {
+      "baseUrl": "https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod"
+    }
+  },
+  "auth": {
+    "provider": "google",
+    "googleClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  },
+  "features": {
+    "receiptUpload": true,
+    "cashbackCounter": true,
+    "googleLogin": true
+  },
+  "ui": {
+    "currency": "USD",
+    "currencySymbol": "$",
+    "maxFileSizeMB": 10,
+    "acceptedFileTypes": [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "application/pdf"
+    ]
+  }
+}
