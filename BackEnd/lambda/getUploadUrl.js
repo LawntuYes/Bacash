@@ -1,3 +1,13 @@
+// Import the required AWS SDK v3 clients and commands
+// (Note: In Lambda Node.js 18+ runtime, these are built-in, no need to npm install if deploying to AWS!)
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+
+// Initialize the S3 Client
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION || "us-east-1",
+});
+
 exports.handler = async (event) => {
   console.log(
     "Received event for getUploadUrl:",
@@ -5,27 +15,39 @@ exports.handler = async (event) => {
   );
 
   try {
-    // Placeholder implementation for generating a pre-signed S3 URL
-    // In a real AWS setup, you would use @aws-sdk/s3-request-presigner and @aws-sdk/client-s3
+    // 1. Get the bucket name from Environment Variables (Best Practice)
+    // Set this variable when creating the Lambda function!
+    const bucketName = process.env.UPLOAD_BUCKET_NAME || "demo-bucket-bacash";
 
-    // Generate a semi-unique file name
-    const fileName = `receipt-${Date.now()}.jpg`;
+    // 2. Generate a secure, unique file name for the S3 object key
+    const fileName = `receipt-${Date.now()}-${Math.floor(Math.random() * 1000)}.jpg`;
 
-    // This is a placeholder API URL for now, just to test the frontend flow
-    const mockPresignedUrl = `https://mock-s3-bucket.s3.amazonaws.com/uploads/${fileName}?signature=mock123`;
+    // 3. Create the command to tell S3 what we want to do (Put an Object)
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: fileName,
+      ContentType: "image/jpeg", // Force the content type to match
+    });
+
+    // 4. Generate the Pre-signed URL using the SDK
+    // This URL gives the frontend temporary permission to execute the PutObjectCommand
+    // The URL expires in 300 seconds (5 minutes)
+    const presignedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 300,
+    });
 
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        // Essential CORS headers if calling from a web browser
+        // Essential CORS headers if calling directly from a browser web app
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       },
       body: JSON.stringify({
-        uploadUrl: mockPresignedUrl,
+        uploadUrl: presignedUrl,
         fileName: fileName,
-        message: "Mock pre-signed URL generated successfully",
+        message: "Pre-signed URL generated successfully for direct S3 upload",
       }),
     };
   } catch (error) {
