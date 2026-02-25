@@ -72,48 +72,47 @@
 
           const file = fileInput.files[0];
 
-          // Convert file to Base64
-          const reader = new FileReader();
-          reader.onload = async function () {
-            const base64String = reader.result
-              .replace("data:", "")
-              .replace(/^.+,/, "");
+          try {
+            resultDiv.textContent = "Step 1: Getting upload URL...";
 
-            try {
-              resultDiv.textContent = "Uploading...";
+            /*
+             * In reality, you'd call your API Gateway endpoint for getUploadUrl here:
+             * const response = await fetch('https://your-api.com/getUploadUrl');
+             * const data = await response.json();
+             * const { uploadUrl } = data;
+             */
 
-              /*
-               * In a real environment, you would call your API Gateway URL here:
-               * const lambdaApiUrl = "https://your-api-gateway-url.com/upload-receipt";
-               */
+            // Simulating the Lambda response for now
+            console.log("Mocking fetch to getUploadUrl lambda...");
+            await new Promise((r) => setTimeout(r, 500));
+            const mockUploadUrl = `https://mock-s3-bucket.s3.amazonaws.com/uploads/receipt-${Date.now()}.jpg?signature=mock`;
 
-              // For now we simulate the lambda call
-              console.log("Mocking request to lambda with base64 data");
-              setTimeout(() => {
-                resultDiv.textContent =
-                  "Success: Photo sent to lambda! (Mocked)";
-              }, 1000);
+            resultDiv.textContent = "Step 2: Uploading directly to S3...";
 
-              /*
-                const response = await fetch(lambdaApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ body: base64String }) // Lambda event structure
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    resultDiv.textContent = 'Success: ' + data.message;
-                } else {
-                    errorDiv.textContent = 'Error: ' + data.message;
-                }
-                */
-            } catch (err) {
-              errorDiv.textContent = "Error sending request: " + err.message;
-            }
-          };
+            /*
+             * Now we PUT the actual binary file directly to the S3 Presigned URL that Lambda gave us.
+             * S3 handles the heavy lifting, skipping API Gateway payload limits!
+             */
+            console.log(`Mocking PUT request to ${mockUploadUrl}`);
+            await new Promise((r) => setTimeout(r, 800)); // Simulate upload time
 
-          reader.readAsDataURL(file);
+            /*
+             * Actual code would look like this:
+             * const uploadResponse = await fetch(mockUploadUrl, {
+             *     method: 'PUT',
+             *     headers: {
+             *         'Content-Type': file.type // Make sure to match the file type!
+             *     },
+             *     body: file // Send the raw file object
+             * });
+             * if (!uploadResponse.ok) throw new Error("Failed to upload to S3");
+             */
+
+            resultDiv.textContent =
+              "Success: Photo uploaded to S3! Now waiting for Textract...";
+          } catch (err) {
+            errorDiv.textContent = "Error: " + err.message;
+          }
         });
     </script>
   </body>
